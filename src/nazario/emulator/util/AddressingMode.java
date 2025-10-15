@@ -6,6 +6,13 @@ import nazario.emulator.InstructionSet;
 ///
 /// http://www.6502.org/users/obelisk/6502/addressing.html
 public enum AddressingMode {
+    /// **Relative**
+    ///
+    /// Relative addressing mode is used by branch instructions (e.g. BEQ, BNE, etc.) which contain a signed 8 bit relative offset (e.g. -128 to +127) which is added to program counter if the condition is true. As the program counter itself is incremented during instruction execution by two the effective address range for the target instruction must be with -126 to +129 bytes of the branch.
+    ///
+    /// *http://www.6502.org/users/obelisk/6502/addressing.html#REL*
+    RELATIVE,
+
     /// **Immediate**
     ///
     /// Immediate addressing allows the programmer to directly specify an 8 bit constant within the instruction. It is indicated by a '#' symbol followed by an numeric expression.
