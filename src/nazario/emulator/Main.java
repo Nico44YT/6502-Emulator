@@ -1,35 +1,37 @@
 package nazario.emulator;
 
 import nazario.emulator.util.InstructionInfo;
-
-import java.util.Arrays;
+import nazario.emulator.util.InstructionsFunction;
+import nazario.emulator.util.Pair;
 
 public class Main {
     public static void main(String[] args) {
         Memory memory = new Memory();
         Registrars registrars = new Registrars();
+
+        Loader.loadIntoMemory("G:\\Projects\\6502 Emulator\\resources\\test.bin", 0x0600, memory);
         byte[] memoryArray = memory.getMemory();
 
-        memoryArray[0] = (byte)0xA2; //ldx
-        memoryArray[1] = (byte)0x0A; //#10
-        memoryArray[2] = (byte)0x86; //stx
-        memoryArray[3] = (byte)0x0A; //$0A
-        memoryArray[4] = (byte)0x4C; //jmp
-        memoryArray[5] = (byte)0xFF; //$FF
-        memoryArray[6] = (byte)0xFF; //FF
+        for(int programCounter = 0x600; programCounter < memoryArray.length; programCounter++) {
+            byte value = memoryArray[programCounter];
 
-        for(int index = 0;index < memoryArray.length;index++) {
-            byte value = memoryArray[index];
+            if(value == 0) {
+                System.out.println("BRK!");
+                break;
+            }
 
-            if(value == 0) continue;
-
-            InstructionInfo instruction = InstructionSet.getInstructions()[Byte.toUnsignedInt(value)];
-            index = Short.toUnsignedInt(instruction.function.apply(index, memory, registrars, instruction.size, instruction.cycles));
-            instruction.flagFunction.apply(index, memory, registrars, instruction.size, instruction.cycles);
-
-            index--;
+            Pair<InstructionInfo, InstructionsFunction> instructionPair = InstructionSet.getInstructions()[Byte.toUnsignedInt(value)];
+            programCounter = Short.toUnsignedInt(
+                    instructionPair.right().apply(
+                            programCounter,
+                            memory,
+                            registrars,
+                            instructionPair.left()
+                    )
+            );
+            programCounter--;
         }
 
-        System.out.println(Arrays.toString(memoryArray));
+        Loader.dumpMemory("G:\\Projects\\6502 Emulator\\resources\\dump.bin", memory);
     }
 }

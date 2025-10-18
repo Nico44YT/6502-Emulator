@@ -5,5 +5,5 @@ import nazario.emulator.Registrars;
 
 @FunctionalInterface
 public interface InstructionsFunction {
-    short apply(int programCounter, Memory memory, Registrars registrars, int size, int cycles);
+    short apply(int programCounter, Memory memory, Registrars registrars, InstructionInfo instructionInfo);
 }

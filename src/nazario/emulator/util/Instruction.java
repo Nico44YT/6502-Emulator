@@ -2,25 +2,23 @@ package nazario.emulator.util;
 
 import nazario.emulator.InstructionSet;
 
-import java.util.function.Function;
-
 public class Instruction {
 
-    protected final Function<AddressingMode, InstructionInfo> factory;
-    protected final Function<AddressingMode, FlagFunction> flagFunctionFactory;
+    protected InstructionsFunction function;
+    protected InstructionInfo[] infos;
 
-    public Instruction(Function<AddressingMode, InstructionInfo> factory, Function<AddressingMode, FlagFunction> flagFunctionFactory) {
-        this.factory = factory;
-        this.flagFunctionFactory = flagFunctionFactory;
+    public Instruction(InstructionInfo[] infos, InstructionsFunction function) {
+        this.function = function;
+        this.infos = infos;
 
         InstructionSet.instructionRegistry.add(this);
     }
 
-    public Function<AddressingMode, InstructionInfo> getFactory() {
-        return factory;
+    public InstructionsFunction getFunction() {
+        return function;
     }
 
-    public Function<AddressingMode, FlagFunction> getFlagFunctionFactory() {
-        return flagFunctionFactory;
+    public InstructionInfo[] getInfos() {
+        return infos;
     }
 }
