@@ -8,10 +8,14 @@ public class Instruction {
     protected InstructionInfo[] infos;
 
     public Instruction(InstructionInfo[] infos, InstructionsFunction function) {
+        this(infos, function, true);
+    }
+
+    public Instruction(InstructionInfo[] infos, InstructionsFunction function, boolean addToRegistry) {
         this.function = function;
         this.infos = infos;
 
-        InstructionSet.instructionRegistry.add(this);
+        if(addToRegistry) InstructionSet.instructionRegistry.add(this);
     }
 
     public InstructionsFunction getFunction() {

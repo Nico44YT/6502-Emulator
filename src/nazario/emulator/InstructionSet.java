@@ -18,6 +18,7 @@ public class InstructionSet {
 
             instructionRegistry.forEach(instructionContainer -> {
                 for (InstructionInfo info : instructionContainer.getInfos()) {
+                    if(instructions[info.opcode()] != null) throw new RuntimeException("Instruction with opcode " + info.opcode() + " already registered!");
                     instructions[info.opcode()] = new Pair<>(info, instructionContainer.getFunction());
                 }
             });
